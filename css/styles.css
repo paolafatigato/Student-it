@@ -384,7 +384,10 @@ input[readonly] {
 
 .choice-chip.is-selected {
   border-color: var(--space-indigo);
-  box-shadow: 0 8px 16px rgba(35, 40, 59, 0.18);
+  box-shadow: inset var(--tile-shadow) calc(0.25rem * var(--tile-height))
+      calc(0.25rem * var(--tile-height)) 0.6rem,
+    inset var(--tile-light) calc(-0.25rem * var(--tile-height))
+      calc(-0.25rem * var(--tile-height)) 0.6rem;
   transform: translateY(-1px);
 }
 
@@ -392,7 +395,10 @@ input[readonly] {
   background: var(--tiger-flame);
   color: var(--white);
   border-color: var(--tiger-flame);
-  box-shadow: 0 8px 16px rgba(240, 107, 51, 0.25);
+  box-shadow: inset var(--tile-shadow) calc(0.25rem * var(--tile-height))
+      calc(0.25rem * var(--tile-height)) 0.6rem,
+    inset var(--tile-light) calc(-0.25rem * var(--tile-height))
+      calc(-0.25rem * var(--tile-height)) 0.6rem;
 }
 
 .family-details {
@@ -487,9 +493,64 @@ input[readonly] {
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
+button:not(.step-button),
+.btn,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  box-shadow: var(--tile-shadow) calc(0.33rem * var(--tile-height))
+    calc(0.33rem * var(--tile-height)) 0.6rem;
+}
+
+button:not(.step-button)::before,
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: var(--tile-light) calc(-0.33rem * var(--tile-height))
+    calc(-0.33rem * var(--tile-height)) 0.6rem;
+  z-index: -1;
+}
+
+button:not(.step-button):hover,
 .btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 16px rgba(35, 40, 59, 0.12);
+  box-shadow: var(--tile-shadow) 0 0 0;
+}
+
+button:not(.step-button):hover::before,
+.btn:hover::before {
+  box-shadow: var(--tile-light) 0 0 0;
+}
+
+button:not(.step-button):active,
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: inset var(--tile-shadow) calc(0.25rem * var(--tile-height))
+    calc(0.25rem * var(--tile-height)) 0.6rem;
+}
+
+button:not(.step-button):active::before,
+.btn:active::before {
+  box-shadow: inset var(--tile-light) calc(-0.25rem * var(--tile-height))
+    calc(-0.25rem * var(--tile-height)) 0.6rem;
+}
+
+.btn.is-selected,
+.btn[aria-pressed="true"] {
+  transform: translateY(1px);
+  box-shadow: inset var(--tile-shadow) calc(0.25rem * var(--tile-height))
+    calc(0.25rem * var(--tile-height)) 0.6rem;
+}
+
+.btn.is-selected::before,
+.btn[aria-pressed="true"]::before {
+  box-shadow: inset var(--tile-light) calc(-0.25rem * var(--tile-height))
+    calc(-0.25rem * var(--tile-height)) 0.6rem;
 }
 
 .btn-next {
@@ -614,6 +675,16 @@ input:invalid, textarea:invalid, select:invalid {
     min-width: 140px;
     text-align: right;
   }
+
+  .panel[data-step="5"] .rating-row {
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .panel[data-step="5"] .rating-row > span {
+    min-width: 180px;
+    text-align: right;
+  }
 }
 
 @media (max-width: 640px) {
@@ -622,7 +693,19 @@ input:invalid, textarea:invalid, select:invalid {
   }
 
   .stepper {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .choice-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .family-row {
+    grid-template-columns: 1fr;
+  }
+
+  .family-list {
+    grid-template-columns: 1fr;
   }
 }
 
