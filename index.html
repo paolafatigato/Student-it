@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Information Questionnaire</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/rating-component.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header" role="banner">
+      <div class="header-content">
+        <div>
+          <p class="eyebrow">Welcome!</p>
+          <h1>Student Information Questionnaire</h1>
+          <p class="subtitle">Let us know about you. Your answers help us make lessons awesome.</p>
+        </div>
+        <div class="progress-wrapper" aria-live="polite">
+          <div class="progress-label">Progress: <span id="progressPercent">0%</span></div>
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <div class="save-indicator" id="saveIndicator" aria-live="polite">Progress not saved yet.</div>
+        </div>
+      </div>
+      <ol class="stepper" id="stepper" aria-label="Questionnaire steps">
+        <li class="step active" data-step="0">
+          <button type="button" class="step-button" aria-current="step">
+            <span class="step-tile tile tile--circle">
+              <span class="step-tile-inner tile tile--circle"><span class="step-index">👤</span></span>
+            </span>
+            <span class="step-label">Personal</span>
+          </button>
+        </li>
+        <li class="step" data-step="1">
+          <button type="button" class="step-button">
+            <span class="step-tile tile tile--circle">
+              <span class="step-tile-inner tile tile--circle"><span class="step-index">⏰</span></span>
+            </span>
+            <span class="step-label">Habits</span>
+          </button>
+        </li>
+        <li class="step" data-step="2">
+          <button type="button" class="step-button">
+            <span class="step-tile tile tile--circle">
+              <span class="step-tile-inner tile tile--circle"><span class="step-index">🎨</span></span>
+            </span>
+            <span class="step-label">Hobbies</span>
+          </button>
+        </li>
+        <li class="step" data-step="3">
+          <button type="button" class="step-button">
+            <span class="step-tile tile tile--circle">
+              <span class="step-tile-inner tile tile--circle"><span class="step-index">📚</span></span>
+            </span>
+            <span class="step-label">Subjects</span>
+          </button>
+        </li>
+        <li class="step" data-step="4">
+          <button type="button" class="step-button">
+            <span class="step-tile tile tile--circle">
+              <span class="step-tile-inner tile tile--circle"><span class="step-index">💬</span></span>
+            </span>
+            <span class="step-label">English</span>
+          </button>
+        </li>
+        <li class="step" data-step="5">
+          <button type="button" class="step-button">
+            <span class="step-tile tile tile--circle">
+              <span class="step-tile-inner tile tile--circle"><span class="step-index">🧑‍🏫</span></span>
+            </span>
+            <span class="step-label">Lessons</span>
+          </button>
+        </li>
+        <li class="step" data-step="6">
+          <button type="button" class="step-button">
+            <span class="step-tile tile tile--circle">
+              <span class="step-tile-inner tile tile--circle"><span class="step-index">🏆</span></span>
+            </span>
+            <span class="step-label">Best Lessons</span>
+          </button>
+        </li>
+      </ol>
+    </header>
+
+    <main>
+      <form id="studentForm" novalidate>
+        <section class="panel accent-mint" data-step="0" aria-labelledby="section-personal">
+          <div class="panel-header">
+            <h2 id="section-personal">Personal Information</h2>
+            <p>Tell us a little bit about yourself.</p>
+          </div>
+          <div class="panel-body">
+            <div class="field">
+              <label for="preferredName">Preferred Name <span class="required">*</span></label>
+              <input type="text" id="preferredName" name="preferredName" required data-required="true" autocomplete="given-name" />
+              <p class="helper">How do you want us to call you?</p>
+            </div>
+            <div class="field">
+              <label for="livesWith">Who lives with you? <span class="required">*</span></label>
+              <input type="text" id="livesWith" name="livesWith" required data-required="true" />
+            </div>
+            <div class="field">
+              <label for="languagesHome">Languages at home <span class="required">*</span></label>
+              <input type="text" id="languagesHome" name="languagesHome" required data-required="true" />
+            </div>
+          </div>
+          <div class="panel-nav">
+            <button type="button" class="btn btn-next" data-action="next">Next</button>
+          </div>
+        </section>
+
+        <section class="panel accent-flame" data-step="1" aria-labelledby="section-habits">
+          <div class="panel-header">
+            <h2 id="section-habits">Habits</h2>
+            <p>Help us understand your routines.</p>
+          </div>
+          <div class="panel-body">
+            <fieldset class="field">
+              <legend>Where do I study? <span class="required">*</span></legend>
+              <div class="radio-group" role="radiogroup" aria-label="Where do I study">
+                <label><input type="radio" name="studyPlace" value="Home" required data-required="true" /> Home</label>
+                <label><input type="radio" name="studyPlace" value="Library" /> Library</label>
+                <label><input type="radio" name="studyPlace" value="Other" id="studyOtherRadio" /> Other</label>
+              </div>
+              <input type="text" id="studyOther" name="studyOther" placeholder="If other, tell us where" disabled />
+            </fieldset>
+
+            <div class="field">
+              <label for="screenTime">Hours of screen time per day: <span id="screenValue">2</span></label>
+              <input type="range" id="screenTime" name="screenTime" min="0" max="10" step="1" value="2" data-required="true" />
+            </div>
+
+            <div class="field">
+              <label for="studyHelper">Who helps you study? <span class="required">*</span></label>
+              <input type="text" id="studyHelper" name="studyHelper" required data-required="true" />
+            </div>
+
+            <div class="field inline">
+              <label for="homeworkStart">At what time do you start your homework? <span class="required">*</span></label>
+              <input type="time" id="homeworkStart" name="homeworkStart" required data-required="true" />
+            </div>
+
+            <div class="field inline">
+              <label for="bedTime">I go to bed at <span class="required">*</span></label>
+              <input type="time" id="bedTime" name="bedTime" required data-required="true" />
+            </div>
+
+            <div class="field inline">
+              <label for="wakeTime">I wake up at <span class="required">*</span></label>
+              <input type="time" id="wakeTime" name="wakeTime" required data-required="true" />
+            </div>
+
+            <div class="field">
+              <label for="sleepHours">Hours of sleep</label>
+              <input type="text" id="sleepHours" name="sleepHours" readonly />
+            </div>
+          </div>
+          <div class="panel-nav">
+            <button type="button" class="btn btn-secondary" data-action="prev">Previous</button>
+            <button type="button" class="btn btn-next" data-action="next">Next</button>
+          </div>
+        </section>
+
+        <section class="panel accent-plum" data-step="2" aria-labelledby="section-hobbies">
+          <div class="panel-header">
+            <h2 id="section-hobbies">My Hobbies &amp; Strengths</h2>
+            <p>Share what you enjoy and what you’re great at.</p>
+          </div>
+          <div class="panel-body">
+            <div class="field">
+              <label for="favoriteHobby">My favorite hobby <span class="required">*</span></label>
+              <input type="text" id="favoriteHobby" name="favoriteHobby" required data-required="true" />
+            </div>
+            <div class="field">
+              <label for="weekendLove">I love to do on weekends <span class="required">*</span></label>
+              <input type="text" id="weekendLove" name="weekendLove" required data-required="true" />
+            </div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label for="goodAt1">Thing I am good at #1 <span class="required">*</span></label>
+                <input type="text" id="goodAt1" name="goodAt1" required data-required="true" />
+              </div>
+              <div class="field">
+                <label for="goodAt2">Thing I am good at #2 <span class="required">*</span></label>
+                <input type="text" id="goodAt2" name="goodAt2" required data-required="true" />
+              </div>
+              <div class="field">
+                <label for="goodAt3">Thing I am good at #3 <span class="required">*</span></label>
+                <input type="text" id="goodAt3" name="goodAt3" required data-required="true" />
+              </div>
+              <div class="field">
+                <label for="difficult1">Thing I find difficult #1 <span class="required">*</span></label>
+                <input type="text" id="difficult1" name="difficult1" required data-required="true" />
+              </div>
+              <div class="field">
+                <label for="difficult2">Thing I find difficult #2 <span class="required">*</span></label>
+                <input type="text" id="difficult2" name="difficult2" required data-required="true" />
+              </div>
+              <div class="field">
+                <label for="difficult3">Thing I find difficult #3 <span class="required">*</span></label>
+                <input type="text" id="difficult3" name="difficult3" required data-required="true" />
+              </div>
+            </div>
+          </div>
+          <div class="panel-nav">
+            <button type="button" class="btn btn-secondary" data-action="prev">Previous</button>
+            <button type="button" class="btn btn-next" data-action="next">Next</button>
+          </div>
+        </section>
+
+        <section class="panel accent-gold" data-step="3" aria-labelledby="section-subjects">
+          <div class="panel-header">
+            <h2 id="section-subjects">School Subjects</h2>
+            <p>How much do you enjoy each subject?</p>
+          </div>
+          <div class="panel-body">
+            <div class="rating-grid">
+              <div class="rating-row">
+                <span>English</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateEnglish" value="1" required data-required="true" />
+                  <input type="radio" name="rateEnglish" value="2" />
+                  <input type="radio" name="rateEnglish" value="3" />
+                  <input type="radio" name="rateEnglish" value="4" />
+                  <input type="radio" name="rateEnglish" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Math</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateMath" value="1" required data-required="true" />
+                  <input type="radio" name="rateMath" value="2" />
+                  <input type="radio" name="rateMath" value="3" />
+                  <input type="radio" name="rateMath" value="4" />
+                  <input type="radio" name="rateMath" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Science</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateScience" value="1" required data-required="true" />
+                  <input type="radio" name="rateScience" value="2" />
+                  <input type="radio" name="rateScience" value="3" />
+                  <input type="radio" name="rateScience" value="4" />
+                  <input type="radio" name="rateScience" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Italian</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateItalian" value="1" required data-required="true" />
+                  <input type="radio" name="rateItalian" value="2" />
+                  <input type="radio" name="rateItalian" value="3" />
+                  <input type="radio" name="rateItalian" value="4" />
+                  <input type="radio" name="rateItalian" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Literature</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateLiterature" value="1" required data-required="true" />
+                  <input type="radio" name="rateLiterature" value="2" />
+                  <input type="radio" name="rateLiterature" value="3" />
+                  <input type="radio" name="rateLiterature" value="4" />
+                  <input type="radio" name="rateLiterature" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Art</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateArt" value="1" required data-required="true" />
+                  <input type="radio" name="rateArt" value="2" />
+                  <input type="radio" name="rateArt" value="3" />
+                  <input type="radio" name="rateArt" value="4" />
+                  <input type="radio" name="rateArt" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Music</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateMusic" value="1" required data-required="true" />
+                  <input type="radio" name="rateMusic" value="2" />
+                  <input type="radio" name="rateMusic" value="3" />
+                  <input type="radio" name="rateMusic" value="4" />
+                  <input type="radio" name="rateMusic" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Theater</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateTheater" value="1" required data-required="true" />
+                  <input type="radio" name="rateTheater" value="2" />
+                  <input type="radio" name="rateTheater" value="3" />
+                  <input type="radio" name="rateTheater" value="4" />
+                  <input type="radio" name="rateTheater" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>P.E.</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="ratePE" value="1" required data-required="true" />
+                  <input type="radio" name="ratePE" value="2" />
+                  <input type="radio" name="ratePE" value="3" />
+                  <input type="radio" name="ratePE" value="4" />
+                  <input type="radio" name="ratePE" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Technology</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateTechnology" value="1" required data-required="true" />
+                  <input type="radio" name="rateTechnology" value="2" />
+                  <input type="radio" name="rateTechnology" value="3" />
+                  <input type="radio" name="rateTechnology" value="4" />
+                  <input type="radio" name="rateTechnology" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Geography</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateGeography" value="1" required data-required="true" />
+                  <input type="radio" name="rateGeography" value="2" />
+                  <input type="radio" name="rateGeography" value="3" />
+                  <input type="radio" name="rateGeography" value="4" />
+                  <input type="radio" name="rateGeography" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>History</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateHistory" value="1" required data-required="true" />
+                  <input type="radio" name="rateHistory" value="2" />
+                  <input type="radio" name="rateHistory" value="3" />
+                  <input type="radio" name="rateHistory" value="4" />
+                  <input type="radio" name="rateHistory" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Informatics</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateInformatics" value="1" required data-required="true" />
+                  <input type="radio" name="rateInformatics" value="2" />
+                  <input type="radio" name="rateInformatics" value="3" />
+                  <input type="radio" name="rateInformatics" value="4" />
+                  <input type="radio" name="rateInformatics" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Dance</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateDance" value="1" required data-required="true" />
+                  <input type="radio" name="rateDance" value="2" />
+                  <input type="radio" name="rateDance" value="3" />
+                  <input type="radio" name="rateDance" value="4" />
+                  <input type="radio" name="rateDance" value="5" />
+                </div>
+              </div>
+              <div class="rating-row">
+                <span>Crafts</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="rateCrafts" value="1" required data-required="true" />
+                  <input type="radio" name="rateCrafts" value="2" />
+                  <input type="radio" name="rateCrafts" value="3" />
+                  <input type="radio" name="rateCrafts" value="4" />
+                  <input type="radio" name="rateCrafts" value="5" />
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="favoriteSubject">My favorite subject is <span class="required">*</span></label>
+              <select id="favoriteSubject" name="favoriteSubject" required data-required="true">
+                <option value="">Select a subject</option>
+                <option>English</option>
+                <option>Math</option>
+                <option>Science</option>
+                <option>Italian</option>
+                <option>Literature</option>
+                <option>Art</option>
+                <option>Music</option>
+                <option>Theater</option>
+                <option>P.E.</option>
+                <option>Technology</option>
+                <option>Geography</option>
+                <option>History</option>
+                <option>Informatics</option>
+                <option>Dance</option>
+                <option>Crafts</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="favoriteSubjectReason">Because <span class="required">*</span></label>
+              <textarea id="favoriteSubjectReason" name="favoriteSubjectReason" rows="4" required data-required="true" data-maxlen="240"></textarea>
+              <p class="counter" data-counter-for="favoriteSubjectReason">0/240</p>
+              <p class="helper" data-guidance-for="favoriteSubjectReason"></p>
+            </div>
+          </div>
+          <div class="panel-nav">
+            <button type="button" class="btn btn-secondary" data-action="prev">Previous</button>
+            <button type="button" class="btn btn-next" data-action="next">Next</button>
+          </div>
+        </section>
+
+        <section class="panel accent-mint" data-step="4" aria-labelledby="section-english">
+          <div class="panel-header">
+            <h2 id="section-english">English Language</h2>
+            <p>Tell us about your English journey.</p>
+          </div>
+          <div class="panel-body">
+            <div class="rating-row">
+              <span>My confidence</span>
+              <div class="rating" data-rating-group>
+                <input type="radio" name="englishConfidence" value="1" required data-required="true" />
+                <input type="radio" name="englishConfidence" value="2" />
+                <input type="radio" name="englishConfidence" value="3" />
+                <input type="radio" name="englishConfidence" value="4" />
+                <input type="radio" name="englishConfidence" value="5" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="englishYears">How long have I studied English? <span class="required">*</span></label>
+              <input type="text" id="englishYears" name="englishYears" required data-required="true" placeholder="Example: 3 years" />
+            </div>
+            <div class="field">
+              <label for="englishGoal">One thing I want to learn in English <span class="required">*</span></label>
+              <textarea id="englishGoal" name="englishGoal" rows="4" required data-required="true" data-maxlen="240"></textarea>
+              <p class="counter" data-counter-for="englishGoal">0/240</p>
+              <p class="helper" data-guidance-for="englishGoal"></p>
+            </div>
+            <div class="field">
+              <label for="englishWorry">One thing that worries me about English <span class="required">*</span></label>
+              <textarea id="englishWorry" name="englishWorry" rows="4" required data-required="true" data-maxlen="240"></textarea>
+              <p class="counter" data-counter-for="englishWorry">0/240</p>
+              <p class="helper" data-guidance-for="englishWorry"></p>
+            </div>
+          </div>
+          <div class="panel-nav">
+            <button type="button" class="btn btn-secondary" data-action="prev">Previous</button>
+            <button type="button" class="btn btn-next" data-action="next">Next</button>
+          </div>
+        </section>
+
+        <section class="panel accent-flame" data-step="5" aria-labelledby="section-lessons">
+          <div class="panel-header">
+            <h2 id="section-lessons">English Lessons</h2>
+            <p>Rate how much you enjoy different lesson styles.</p>
+          </div>
+          <div class="panel-body">
+            <div class="rating-grid">
+              <div class="rating-row"><span>Listening to the teacher</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonListening" value="1" required data-required="true" />
+                  <input type="radio" name="lessonListening" value="2" />
+                  <input type="radio" name="lessonListening" value="3" />
+                  <input type="radio" name="lessonListening" value="4" />
+                  <input type="radio" name="lessonListening" value="5" />
+                </div>
+              </div>
+              <div class="rating-row"><span>Working alone</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonAlone" value="1" required data-required="true" />
+                  <input type="radio" name="lessonAlone" value="2" />
+                  <input type="radio" name="lessonAlone" value="3" />
+                  <input type="radio" name="lessonAlone" value="4" />
+                  <input type="radio" name="lessonAlone" value="5" />
+                </div>
+              </div>
+              <div class="rating-row"><span>Working in pairs</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonPairs" value="1" required data-required="true" />
+                  <input type="radio" name="lessonPairs" value="2" />
+                  <input type="radio" name="lessonPairs" value="3" />
+                  <input type="radio" name="lessonPairs" value="4" />
+                  <input type="radio" name="lessonPairs" value="5" />
+                </div>
+              </div>
+              <div class="rating-row"><span>Working in groups</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonGroups" value="1" required data-required="true" />
+                  <input type="radio" name="lessonGroups" value="2" />
+                  <input type="radio" name="lessonGroups" value="3" />
+                  <input type="radio" name="lessonGroups" value="4" />
+                  <input type="radio" name="lessonGroups" value="5" />
+                </div>
+              </div>
+              <div class="rating-row"><span>Watching videos</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonVideos" value="1" required data-required="true" />
+                  <input type="radio" name="lessonVideos" value="2" />
+                  <input type="radio" name="lessonVideos" value="3" />
+                  <input type="radio" name="lessonVideos" value="4" />
+                  <input type="radio" name="lessonVideos" value="5" />
+                </div>
+              </div>
+              <div class="rating-row"><span>Moving, stand-up activities</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonMoving" value="1" required data-required="true" />
+                  <input type="radio" name="lessonMoving" value="2" />
+                  <input type="radio" name="lessonMoving" value="3" />
+                  <input type="radio" name="lessonMoving" value="4" />
+                  <input type="radio" name="lessonMoving" value="5" />
+                </div>
+              </div>
+              <div class="rating-row"><span>Speaking</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonSpeaking" value="1" required data-required="true" />
+                  <input type="radio" name="lessonSpeaking" value="2" />
+                  <input type="radio" name="lessonSpeaking" value="3" />
+                  <input type="radio" name="lessonSpeaking" value="4" />
+                  <input type="radio" name="lessonSpeaking" value="5" />
+                </div>
+              </div>
+              <div class="rating-row"><span>Oral tests</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonOral" value="1" required data-required="true" />
+                  <input type="radio" name="lessonOral" value="2" />
+                  <input type="radio" name="lessonOral" value="3" />
+                  <input type="radio" name="lessonOral" value="4" />
+                  <input type="radio" name="lessonOral" value="5" />
+                </div>
+              </div>
+              <div class="rating-row"><span>Games</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonGames" value="1" required data-required="true" />
+                  <input type="radio" name="lessonGames" value="2" />
+                  <input type="radio" name="lessonGames" value="3" />
+                  <input type="radio" name="lessonGames" value="4" />
+                  <input type="radio" name="lessonGames" value="5" />
+                </div>
+              </div>
+              <div class="rating-row"><span>Written tests</span>
+                <div class="rating" data-rating-group>
+                  <input type="radio" name="lessonWritten" value="1" required data-required="true" />
+                  <input type="radio" name="lessonWritten" value="2" />
+                  <input type="radio" name="lessonWritten" value="3" />
+                  <input type="radio" name="lessonWritten" value="4" />
+                  <input type="radio" name="lessonWritten" value="5" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-nav">
+            <button type="button" class="btn btn-secondary" data-action="prev">Previous</button>
+            <button type="button" class="btn btn-next" data-action="next">Next</button>
+          </div>
+        </section>
+
+        <section class="panel accent-plum" data-step="6" aria-labelledby="section-best">
+          <div class="panel-header">
+            <h2 id="section-best">Best Lessons Ever</h2>
+            <p>Describe your favorite lesson experiences.</p>
+          </div>
+          <div class="panel-body">
+            <div class="field">
+              <label for="bestLessons">Tell us about the best lessons ever <span class="required">*</span></label>
+              <textarea id="bestLessons" name="bestLessons" rows="6" required data-required="true" data-maxlen="500"></textarea>
+              <p class="counter" data-counter-for="bestLessons">0/500</p>
+              <p class="helper" data-guidance-for="bestLessons"></p>
+            </div>
+          </div>
+          <div class="panel-nav">
+            <button type="button" class="btn btn-secondary" data-action="prev">Previous</button>
+            <button type="submit" class="btn btn-submit">Submit</button>
+          </div>
+        </section>
+
+        <footer class="app-footer">
+          <button type="button" class="btn btn-outline" id="downloadJson">Download JSON</button>
+          <button type="button" class="btn btn-outline" id="printPdf">Print / Save as PDF</button>
+          <button type="reset" class="btn btn-ghost">Reset</button>
+        </footer>
+      </form>
+    </main>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/form-handler.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
