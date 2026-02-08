@@ -183,6 +183,23 @@
     });
   }
 
+  function updateRatingGroup(rating) {
+    if (!rating) {
+      return;
+    }
+    const inputs = Array.from(rating.querySelectorAll("input[type='radio']"));
+    const checkedIndex = inputs.findIndex((input) => input.checked);
+    inputs.forEach((input, index) => {
+      const shouldFill = checkedIndex >= 0 && index <= checkedIndex;
+      input.classList.toggle("is-filled", shouldFill);
+    });
+  }
+
+  function updateAllRatings() {
+    const ratings = Array.from(form.querySelectorAll(".rating"));
+    ratings.forEach((rating) => updateRatingGroup(rating));
+  }
+
   const allowStepNavigationWithoutValidation = true;
 
   form.addEventListener("click", (event) => {
@@ -214,7 +231,10 @@
     updateCounters();
   });
 
-  form.addEventListener("change", () => {
+  form.addEventListener("change", (event) => {
+    if (event.target.matches(".rating input[type='radio']")) {
+      updateRatingGroup(event.target.closest(".rating"));
+    }
     updateProgress();
     toggleStudyOther();
     calculateSleepHours();
@@ -263,5 +283,6 @@
   updateCounters();
   updateProgress();
   setupRatingAria();
+  updateAllRatings();
   showStep(0);
 })();
