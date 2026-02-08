@@ -13,6 +13,9 @@
   const bedTime = document.getElementById("bedTime");
   const wakeTime = document.getElementById("wakeTime");
   const sleepHours = document.getElementById("sleepHours");
+  const hobbyInput = document.getElementById("hobbyInput");
+  const hobbyList = document.getElementById("hobbyList");
+  const hobbySummary = document.getElementById("hobbySummary");
   const livesWithHidden = document.getElementById("livesWith");
   const livesWithCheckboxes = Array.from(document.querySelectorAll("[data-lives-with]"));
   const familyDetails = document.getElementById("familyDetails");
@@ -22,8 +25,18 @@
   const printPdf = document.getElementById("printPdf");
   const app = document.querySelector(".app");
   const accentClasses = ["accent-mint", "accent-flame", "accent-plum", "accent-gold"];
+  const hobbyPlaceholderSets = [
+    "reading, playing videogames...",
+    "drawing, dancing...",
+    "playing football, swimming...",
+    "singing, acting...",
+    "cooking, biking...",
+    "coding, photography..."
+  ];
 
   let currentStep = 0;
+  let hobbyCount = 0;
+  let hobbyPlaceholderIndex = 0;
 
   function showStep(index) {
     if (index < 0 || index >= panels.length) {
@@ -301,6 +314,103 @@
     ratings.forEach((rating) => updateRatingGroup(rating));
   }
 
+  function updateHobbySummary() {
+    if (!hobbySummary || !hobbyList) {
+      return;
+    }
+    const labels = Array.from(hobbyList.querySelectorAll(".hobby-rating-label"))
+      .map((label) => label.textContent.trim())
+      .filter(Boolean);
+    hobbySummary.value = labels.join(", ");
+  }
+
+  function createHobbyRow(label, index = null, ratingValue = "") {
+    if (!hobbyList) {
+      return;
+    }
+    const trimmedLabel = label.trim();
+    if (!trimmedLabel) {
+      return;
+    }
+    const hobbyIndex = Number.isInteger(index) ? index : hobbyCount + 1;
+    hobbyCount = Math.max(hobbyCount, hobbyIndex);
+
+    const row = document.createElement("div");
+    row.className = "hobby-rating-row";
+
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "hobby-rating-label";
+    labelSpan.textContent = trimmedLabel;
+
+    const hiddenInput = document.createElement("input");
+    hiddenInput.type = "hidden";
+    hiddenInput.name = `hobbyName_${hobbyIndex}`;
+    hiddenInput.value = trimmedLabel;
+
+    const rating = document.createElement("div");
+    rating.className = "rating";
+    rating.dataset.ratingGroup = "";
+
+    for (let i = 1; i <= 5; i += 1) {
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = `hobbyRating_${hobbyIndex}`;
+      input.value = String(i);
+      input.setAttribute("aria-label", `Rating ${i}`);
+      if (ratingValue && String(ratingValue) === String(i)) {
+        input.checked = true;
+      }
+      rating.appendChild(input);
+    }
+
+    row.appendChild(labelSpan);
+    row.appendChild(rating);
+    row.appendChild(hiddenInput);
+    hobbyList.appendChild(row);
+
+    updateRatingGroup(rating);
+    updateHobbySummary();
+  }
+
+  function addHobbyFromInput() {
+    if (!hobbyInput) {
+      return;
+    }
+    const value = hobbyInput.value.trim();
+    if (!value) {
+      return;
+    }
+    createHobbyRow(value);
+    hobbyInput.value = "";
+    if (hobbyPlaceholderSets.length > 0) {
+      hobbyPlaceholderIndex = (hobbyPlaceholderIndex + 1) % hobbyPlaceholderSets.length;
+      hobbyInput.placeholder = hobbyPlaceholderSets[hobbyPlaceholderIndex];
+    }
+    updateProgress();
+  }
+
+  function hydrateHobbyRatings(data = {}) {
+    if (!data || !hobbyList) {
+      return;
+    }
+    const entries = Object.keys(data)
+      .filter((key) => key.startsWith("hobbyName_"))
+      .map((key) => ({
+        index: Number.parseInt(key.split("_")[1], 10),
+        label: data[key]
+      }))
+      .filter((entry) => Number.isInteger(entry.index) && entry.label);
+
+    entries.sort((a, b) => a.index - b.index);
+
+    entries.forEach((entry) => {
+      const ratingValue = data[`hobbyRating_${entry.index}`] || "";
+      createHobbyRow(entry.label, entry.index, ratingValue);
+    });
+
+    updateHobbySummary();
+  }
+
   const allowStepNavigationWithoutValidation = true;
 
   form.addEventListener("click", (event) => {
@@ -325,6 +435,30 @@
 
   stepperItems.forEach((item, index) => {
     item.addEventListener("click", () => showStep(index));
+  });
+
+  form.addEventListener("mousedown", (event) => {
+    const input = event.target.closest(".panel[data-step='3'] .rating input[type='radio']");
+    if (!input) {
+      return;
+    }
+    if (input.checked) {
+      input.dataset.wasChecked = "true";
+    } else {
+      delete input.dataset.wasChecked;
+    }
+  });
+
+  form.addEventListener("click", (event) => {
+    const input = event.target.closest(".panel[data-step='3'] .rating input[type='radio']");
+    if (!input || input.dataset.wasChecked !== "true") {
+      return;
+    }
+    input.checked = false;
+    delete input.dataset.wasChecked;
+    const rating = input.closest(".rating");
+    updateRatingGroup(rating);
+    updateProgress();
   });
 
   form.addEventListener("input", () => {
@@ -363,6 +497,13 @@
   form.addEventListener("reset", () => {
     window.FormHandler.handleReset(form);
     syncFamilySection();
+    if (hobbyList) {
+      hobbyList.innerHTML = "";
+    }
+    hobbyCount = 0;
+    if (hobbySummary) {
+      hobbySummary.value = "";
+    }
     updateProgress();
     updateCounters();
     updateSaveIndicator();
@@ -383,6 +524,12 @@
   bedTime?.addEventListener("change", calculateSleepHours);
   wakeTime?.addEventListener("change", calculateSleepHours);
   studyOtherRadio?.addEventListener("change", toggleStudyOther);
+  hobbyInput?.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      addHobbyFromInput();
+    }
+  });
 
   const savedData = window.StorageManager.loadFormData(form);
   if (savedData) {
@@ -397,6 +544,7 @@
   setupRatingAria();
   updateAllRatings();
   syncFamilySection(savedData || {});
+  hydrateHobbyRatings(savedData || {});
   updateProgress();
   showStep(0);
 })();

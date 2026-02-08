@@ -13,6 +13,7 @@
   );
 
   let db = null;
+  let auth = null;
 
   function init() {
     if (hasPlaceholder) {
@@ -29,11 +30,45 @@
     }
 
     db = firebase.firestore();
+    if (firebase.auth) {
+      auth = firebase.auth();
+    }
     return true;
   }
 
   function isReady() {
     return Boolean(db);
+  }
+
+  function isAuthReady() {
+    return Boolean(auth);
+  }
+
+  function getCurrentUser() {
+    return auth ? auth.currentUser : null;
+  }
+
+  function onAuthStateChanged(callback) {
+    if (!auth) {
+      callback(null);
+      return () => {};
+    }
+    return auth.onAuthStateChanged(callback);
+  }
+
+  async function signInWithGoogle() {
+    if (!auth) {
+      throw new Error("Firebase Auth is not available.");
+    }
+    const provider = new firebase.auth.GoogleAuthProvider();
+    return auth.signInWithPopup(provider);
+  }
+
+  async function signOut() {
+    if (!auth) {
+      return;
+    }
+    return auth.signOut();
   }
 
   async function submitResponse(data) {
@@ -51,10 +86,25 @@
     return db.collection("responses").add(payload);
   }
 
+  async function fetchResponses() {
+    if (!db && !init()) {
+      throw new Error("Firebase is not configured.");
+    }
+
+    const snapshot = await db.collection("responses").orderBy("submittedAt", "desc").get();
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  }
+
   window.FirebaseService = {
     init,
     isReady,
-    submitResponse
+    isAuthReady,
+    getCurrentUser,
+    onAuthStateChanged,
+    signInWithGoogle,
+    signOut,
+    submitResponse,
+    fetchResponses
   };
 
   init();

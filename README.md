@@ -55,6 +55,26 @@ service cloud.firestore {
 }
 ```
 
+## Admin Export Page (Google Login)
+Open [student-questionnaire/admin.html](student-questionnaire/admin.html) to load responses and download CSV/JSON.
+
+1. In Firebase Console → Build → Authentication → Sign-in method, enable **Google**.
+2. Add your admin email to the allowlist in [student-questionnaire/js/admin.js](student-questionnaire/js/admin.js).
+3. Set Firestore rules to allow read only for your admin email:
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /responses/{docId} {
+      allow create: if true;
+      allow read: if request.auth != null
+  && request.auth.token.email in ["paola.fatigato@gmail.com"];
+      allow update, delete: if false;
+    }
+  }
+}
+```
+
 ## Customization Tips
 - Update colors in [student-questionnaire/css/styles.css](student-questionnaire/css/styles.css).
 - Add or remove fields in [student-questionnaire/index.html](student-questionnaire/index.html).

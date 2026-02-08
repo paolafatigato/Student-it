@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Export - Student Questionnaire</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header" role="banner">
+      <div class="header-content">
+        <div>
+          <p class="eyebrow">Admin</p>
+          <h1>Responses Export</h1>
+          <p class="subtitle">Load responses from Firestore and export CSV or JSON.</p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel active accent-plum">
+        <div class="panel-header">
+          <h2>Controls</h2>
+          <p class="helper">Firestore read must be enabled in Rules to load data.</p>
+        </div>
+        <div class="panel-body">
+          <div class="field" style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+            <button type="button" class="btn btn-next" id="signInBtn">Sign in with Google</button>
+            <button type="button" class="btn btn-outline" id="signOutBtn" disabled>Sign out</button>
+            <span class="helper" id="authStatus">Not signed in.</span>
+          </div>
+          <div class="field" style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-next" id="loadResponses">Load responses</button>
+            <button type="button" class="btn btn-outline" id="downloadCsv" disabled>Download CSV</button>
+            <button type="button" class="btn btn-outline" id="downloadJson" disabled>Download JSON</button>
+          </div>
+          <p id="statusMessage" class="helper"></p>
+        </div>
+      </section>
+
+      <section class="panel active accent-mint" style="margin-top: 24px;">
+        <div class="panel-header">
+          <h2>Preview</h2>
+          <p class="helper">Shows the first 10 responses.</p>
+        </div>
+        <div class="panel-body" style="overflow-x:auto;">
+          <table class="summary-table" id="previewTable" style="width:100%; border-collapse: collapse;"></table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-service.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

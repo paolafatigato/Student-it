@@ -444,6 +444,24 @@ input[readonly] {
   gap: 12px;
 }
 
+.rating-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.hobby-rating-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hobby-rating-label {
+  font-weight: 600;
+}
+
 .panel-nav {
   display: flex;
   justify-content: space-between;
@@ -570,6 +588,16 @@ input:invalid, textarea:invalid, select:invalid {
   .field.inline {
     grid-template-columns: 1fr 1fr;
     align-items: center;
+  }
+
+  .panel[data-step="3"] .rating-row {
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .panel[data-step="3"] .rating-row > span {
+    min-width: 140px;
+    text-align: right;
   }
 }
 

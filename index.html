@@ -312,8 +312,13 @@
           </div>
           <div class="panel-body">
             <div class="field">
-              <label for="favoriteHobby">My favorite hobby <span class="required">*</span></label>
-              <input type="text" id="favoriteHobby" name="favoriteHobby" required data-required="true" />
+              <label for="hobbyInput">My Hobbies <span class="required">*</span></label>
+              <input type="text" id="hobbyInput" name="hobbyInput" placeholder="reading, playing videogames..." />
+              <p class="helper">Type a hobby and press Enter to add a rating.</p>
+              <input type="hidden" id="hobbySummary" name="hobbySummary" required data-required="true" />
+            </div>
+            <div class="field" id="hobbyRatings" aria-live="polite">
+              <div class="rating-list" id="hobbyList"></div>
             </div>
             <div class="field">
               <label for="weekendLove">I love to do on weekends <span class="required">*</span></label>
