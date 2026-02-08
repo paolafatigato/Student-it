@@ -427,6 +427,10 @@ input[readonly] {
   gap: 16px;
 }
 
+.grid-section + .grid-section {
+  margin-top: 16px;
+}
+
 .rating-grid {
   display: grid;
   gap: 14px;
@@ -543,7 +547,7 @@ input[readonly] {
 }
 
 input:invalid, textarea:invalid, select:invalid {
-  border-color: rgba(240, 107, 51, 0.7);
+  border-color: var(--current-accent);
 }
 
 .error-message {

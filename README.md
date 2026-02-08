@@ -11,6 +11,7 @@ A modern, interactive, middle-school friendly questionnaire for student info col
 - Sleep-hours calculator from bedtime and wake time
 - Character counters on text areas
 - JSON export and print-to-PDF support
+- Firebase Firestore submission (optional)
 - Responsive, mobile-first layout
 
 ## Project Structure
@@ -22,6 +23,7 @@ A modern, interactive, middle-school friendly questionnaire for student info col
   /js
     - main.js
     - form-handler.js
+    - firebase-service.js
     - storage.js
     - validation.js
   /images
@@ -31,7 +33,27 @@ A modern, interactive, middle-school friendly questionnaire for student info col
 ## Getting Started
 1. Open [student-questionnaire/index.html](student-questionnaire/index.html) in your browser.
 2. Fill out the form. Progress saves automatically.
-3. Click **Submit** to validate and download JSON.
+3. Click **Submit** to validate, send to Firebase (if configured), and download JSON.
+
+## Firebase Setup (Optional)
+1. Create a Firebase project at https://console.firebase.google.com.
+2. In **Build → Firestore Database**, create a database in production mode.
+3. In **Project Settings → General → Your apps**, add a Web app and copy the config.
+4. Paste the config values into [student-questionnaire/js/firebase-service.js](student-questionnaire/js/firebase-service.js).
+5. Set Firestore rules to allow writes and block reads (example below).
+
+Example Firestore rules (allow create only on `responses`):
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /responses/{docId} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
+  }
+}
+```
 
 ## Customization Tips
 - Update colors in [student-questionnaire/css/styles.css](student-questionnaire/css/styles.css).

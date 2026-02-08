@@ -11,19 +11,29 @@
     URL.revokeObjectURL(url);
   }
 
-  function handleSubmit(form) {
+  async function handleSubmit(form) {
     const result = window.Validation.validateForm(form);
     if (!result.valid) {
       result.firstInvalid?.scrollIntoView({ behavior: "smooth", block: "center" });
-      return false;
+      return { ok: false, message: "Please complete all required fields." };
     }
 
     const data = window.StorageManager.serializeForm(form);
     console.log("Form submission", data);
-    window.StorageManager.saveFormData(form);
-    downloadJson(data);
 
-    return true;
+    try {
+      if (window.FirebaseService) {
+        await window.FirebaseService.submitResponse(data);
+      } else {
+        throw new Error("Firebase service not available.");
+      }
+      window.StorageManager.saveFormData(form);
+      downloadJson(data);
+      return { ok: true };
+    } catch (error) {
+      console.error("Unable to submit to Firebase", error);
+      return { ok: false, message: "Unable to submit right now. Please try again." };
+    }
   }
 
   function handleReset(form) {

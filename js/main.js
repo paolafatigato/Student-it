@@ -350,11 +350,13 @@
     calculateSleepHours();
   });
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const ok = window.FormHandler.handleSubmit(form);
-    if (ok) {
+    const result = await window.FormHandler.handleSubmit(form);
+    if (result.ok) {
       saveIndicator.textContent = "Submitted! Your answers are saved.";
+    } else if (result.message) {
+      saveIndicator.textContent = result.message;
     }
   });
 
