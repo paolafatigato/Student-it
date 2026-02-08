@@ -95,6 +95,16 @@
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   }
 
+  async function deleteResponse(id) {
+    if (!db && !init()) {
+      throw new Error("Firebase is not configured.");
+    }
+    if (!id) {
+      throw new Error("Missing response id.");
+    }
+    return db.collection("responses").doc(id).delete();
+  }
+
   window.FirebaseService = {
     init,
     isReady,
@@ -104,7 +114,8 @@
     signInWithGoogle,
     signOut,
     submitResponse,
-    fetchResponses
+    fetchResponses,
+    deleteResponse
   };
 
   init();

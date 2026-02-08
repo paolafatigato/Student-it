@@ -39,10 +39,55 @@
         </div>
       </section>
 
+      <section class="panel active accent-gold stats-panel" style="margin-top: 24px;">
+        <div class="panel-header">
+          <h2>Statistics</h2>
+          <p class="helper">Aggregated summary from loaded responses.</p>
+        </div>
+        <div class="panel-body">
+          <div class="stats-section">
+            <h3>Filter by class</h3>
+            <div class="stats-filters" id="classFilters"></div>
+          </div>
+          <div class="stats-grid" id="statsGrid"></div>
+
+          <div class="stats-section">
+            <h3>Class distribution</h3>
+            <div class="stats-list" id="classStats"></div>
+          </div>
+
+          <div class="stats-section">
+            <h3>Favorite subjects</h3>
+            <div class="stats-list" id="favoriteStats"></div>
+          </div>
+
+          <div class="stats-section">
+            <h3>Top hobbies</h3>
+            <div class="stats-list" id="hobbyStats"></div>
+          </div>
+
+          <div class="stats-two-column">
+            <div class="stats-section stats-right">
+              <h3>Subject ratings (avg 1-5)</h3>
+              <div class="stats-table-wrap">
+                <table class="summary-table stats-table" id="ratingStats"></table>
+              </div>
+            </div>
+
+            <div class="stats-section stats-right">
+              <h3>Lesson preferences (avg 1-5)</h3>
+              <div class="stats-table-wrap">
+                <table class="summary-table stats-table" id="lessonStats"></table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="panel active accent-mint" style="margin-top: 24px;">
         <div class="panel-header">
           <h2>Preview</h2>
-          <p class="helper">Shows the first 10 responses.</p>
+          <p class="helper">Shows the first 10 responses. Use Delete to remove duplicates.</p>
         </div>
         <div class="panel-body" style="overflow-x:auto;">
           <table class="summary-table" id="previewTable" style="width:100%; border-collapse: collapse;"></table>

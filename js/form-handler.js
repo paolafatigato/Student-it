@@ -12,6 +12,14 @@
   }
 
   async function handleSubmit(form) {
+    const classInput = form.querySelector("#className");
+    if (classInput && !classInput.value) {
+      const selectedButton = form.querySelector("#classGroup [data-class].is-selected")
+        || form.querySelector("#classGroup [data-class][aria-pressed='true']");
+      if (selectedButton) {
+        classInput.value = selectedButton.dataset.class || "";
+      }
+    }
     const result = window.Validation.validateForm(form);
     if (!result.valid) {
       result.firstInvalid?.scrollIntoView({ behavior: "smooth", block: "center" });
