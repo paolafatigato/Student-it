@@ -13,6 +13,11 @@
   const bedTime = document.getElementById("bedTime");
   const wakeTime = document.getElementById("wakeTime");
   const sleepHours = document.getElementById("sleepHours");
+  const livesWithHidden = document.getElementById("livesWith");
+  const livesWithCheckboxes = Array.from(document.querySelectorAll("[data-lives-with]"));
+  const familyDetails = document.getElementById("familyDetails");
+  const familyPersonSections = Array.from(document.querySelectorAll("[data-family-person]"));
+  const familyCountInputs = Array.from(document.querySelectorAll("[data-person-count]"));
   const downloadJson = document.getElementById("downloadJson");
   const printPdf = document.getElementById("printPdf");
   const app = document.querySelector(".app");
@@ -135,6 +140,102 @@
     }
   }
 
+  function updateLivesWithValue() {
+    if (!livesWithHidden) {
+      return;
+    }
+    const selected = livesWithCheckboxes.filter((box) => box.checked).map((box) => box.value);
+    livesWithHidden.value = selected.join(", ");
+  }
+
+  function setConditionalRequired(input, isRequired) {
+    if (!input) {
+      return;
+    }
+    if (isRequired) {
+      input.setAttribute("required", "");
+      input.dataset.required = "true";
+    } else {
+      input.removeAttribute("required");
+      input.removeAttribute("data-required");
+    }
+  }
+
+  function renderNameRows(personKey, count, data = {}) {
+    const list = document.getElementById(`${personKey}List`);
+    if (!list) {
+      return;
+    }
+    const safeCount = Math.max(1, Math.min(10, Number(count) || 1));
+    list.innerHTML = "";
+
+    const labelBase = personKey.replace(/([A-Z])/g, " $1").replace(/^./, (char) => char.toUpperCase());
+
+    for (let i = 1; i <= safeCount; i += 1) {
+      const field = document.createElement("div");
+      field.className = "family-field";
+
+      const label = document.createElement("label");
+      label.setAttribute("for", `${personKey}Name${i}`);
+      label.textContent = `${labelBase}'s name #${i}`;
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.id = `${personKey}Name${i}`;
+      input.name = `${personKey}Name${i}`;
+      input.autocomplete = "name";
+      setConditionalRequired(input, true);
+
+      if (data[input.name]) {
+        input.value = data[input.name];
+      }
+
+      field.appendChild(label);
+      field.appendChild(input);
+      list.appendChild(field);
+    }
+  }
+  function syncFamilySection(data = {}) {
+    updateLivesWithValue();
+    livesWithCheckboxes.forEach((box) => {
+      const chip = box.closest(".choice-chip");
+      if (chip) {
+        chip.classList.toggle("is-selected", box.checked);
+      }
+    });
+    if (familyDetails) {
+      const anySelected = livesWithCheckboxes.some((box) => box.checked);
+      familyDetails.hidden = !anySelected;
+    }
+    familyPersonSections.forEach((section) => {
+      const key = section.dataset.familyPerson;
+      const checkbox = livesWithCheckboxes.find((box) => box.dataset.personTarget === key);
+      const isActive = Boolean(checkbox && checkbox.checked);
+      section.hidden = !isActive;
+      const inputs = Array.from(section.querySelectorAll("input, select, textarea"));
+      inputs.forEach((input) => {
+        setConditionalRequired(input, isActive);
+        if (!isActive) {
+          input.value = "";
+        }
+      });
+      if (isActive) {
+        const countInput = section.querySelector("[data-person-count]");
+        if (countInput) {
+          if (!countInput.value) {
+            countInput.value = "1";
+          }
+          renderNameRows(key, countInput.value, data);
+        }
+      } else {
+        const list = document.getElementById(`${key}List`);
+        if (list) {
+          list.innerHTML = "";
+        }
+      }
+    });
+  }
+
   function calculateSleepHours() {
     if (!bedTime.value || !wakeTime.value) {
       sleepHours.value = "";
@@ -235,6 +336,15 @@
     if (event.target.matches(".rating input[type='radio']")) {
       updateRatingGroup(event.target.closest(".rating"));
     }
+    if (event.target.matches("[data-lives-with]")) {
+      syncFamilySection();
+    }
+    if (event.target.matches("[data-person-count]")) {
+      const key = event.target.dataset.personCount;
+      if (key) {
+        renderNameRows(key, event.target.value);
+      }
+    }
     updateProgress();
     toggleStudyOther();
     calculateSleepHours();
@@ -250,6 +360,7 @@
 
   form.addEventListener("reset", () => {
     window.FormHandler.handleReset(form);
+    syncFamilySection();
     updateProgress();
     updateCounters();
     updateSaveIndicator();
@@ -281,8 +392,9 @@
   toggleStudyOther();
   calculateSleepHours();
   updateCounters();
-  updateProgress();
   setupRatingAria();
   updateAllRatings();
+  syncFamilySection(savedData || {});
+  updateProgress();
   showStep(0);
 })();

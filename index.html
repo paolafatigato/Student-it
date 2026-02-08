@@ -86,21 +86,163 @@
 
     <main>
       <form id="studentForm" novalidate>
-        <section class="panel accent-mint" data-step="0" aria-labelledby="section-personal">
+        <section class="panel accent-plum" data-step="0" aria-labelledby="section-personal">
           <div class="panel-header">
             <h2 id="section-personal">Personal Information</h2>
             <p>Tell us a little bit about yourself.</p>
           </div>
           <div class="panel-body">
             <div class="field">
+              <label for="firstName">Name <span class="required">*</span></label>
+              <input type="text" id="firstName" name="firstName" required data-required="true" autocomplete="given-name" />
+            </div>
+            <div class="field">
+              <label for="lastName">Last name <span class="required">*</span></label>
+              <input type="text" id="lastName" name="lastName" required data-required="true" autocomplete="family-name" />
+            </div>
+            <div class="field">
               <label for="preferredName">Preferred Name <span class="required">*</span></label>
               <input type="text" id="preferredName" name="preferredName" required data-required="true" autocomplete="given-name" />
               <p class="helper">How do you want us to call you?</p>
             </div>
-            <div class="field">
-              <label for="livesWith">Who lives with you? <span class="required">*</span></label>
-              <input type="text" id="livesWith" name="livesWith" required data-required="true" />
-            </div>
+            <fieldset class="field">
+              <legend>Who lives with you? <span class="required">*</span></legend>
+              <input type="hidden" id="livesWith" name="livesWith" required data-required="true" />
+              <div class="choice-grid" id="livesWithGroup">
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesMother" name="livesWithMother" value="Mother" data-lives-with data-person-target="mother" />
+                  <span>Mother</span>
+                </label>
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesFather" name="livesWithFather" value="Father" data-lives-with data-person-target="father" />
+                  <span>Father</span>
+                </label>
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesSister" name="livesWithSister" value="Sister" data-lives-with data-person-target="sister" />
+                  <span>Sister</span>
+                </label>
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesBrother" name="livesWithBrother" value="Brother" data-lives-with data-person-target="brother" />
+                  <span>Brother</span>
+                </label>
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesGrandmother" name="livesWithGrandmother" value="Grandmother" data-lives-with data-person-target="grandmother" />
+                  <span>Grandmother</span>
+                </label>
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesGrandfather" name="livesWithGrandfather" value="Grandfather" data-lives-with data-person-target="grandfather" />
+                  <span>Grandfather</span>
+                </label>
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesCousin" name="livesWithCousin" value="Cousin" data-lives-with data-person-target="cousin" />
+                  <span>Cousin</span>
+                </label>
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesAuntUncle" name="livesWithAuntUncle" value="Aunt/Uncle" data-lives-with data-person-target="auntUncle" />
+                  <span>Aunt/Uncle</span>
+                </label>
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesFriend" name="livesWithFriend" value="Friend" data-lives-with data-person-target="friend" />
+                  <span>Friend</span>
+                </label>
+                <label class="choice-chip">
+                  <input type="checkbox" id="livesOther" name="livesWithOther" value="Other" data-lives-with data-person-target="other" />
+                  <span>Other</span>
+                </label>
+              </div>
+              <div class="family-details" id="familyDetails">
+                <div class="family-person" data-family-person="mother" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="motherCount">How many mothers? <span class="required">*</span></label>
+                      <input type="number" id="motherCount" name="motherCount" min="1" max="10" step="1" value="1" data-person-count="mother" />
+                    </div>
+                    <div class="family-list" id="motherList"></div>
+                  </div>
+                </div>
+                <div class="family-person" data-family-person="father" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="fatherCount">How many fathers? <span class="required">*</span></label>
+                      <input type="number" id="fatherCount" name="fatherCount" min="1" max="10" step="1" value="1" data-person-count="father" />
+                    </div>
+                    <div class="family-list" id="fatherList"></div>
+                  </div>
+                </div>
+                <div class="family-person" data-family-person="sister" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="sisterCount">How many sisters? <span class="required">*</span></label>
+                      <input type="number" id="sisterCount" name="sisterCount" min="1" max="10" step="1" value="1" data-person-count="sister" />
+                    </div>
+                    <div class="family-list" id="sisterList"></div>
+                  </div>
+                </div>
+                <div class="family-person" data-family-person="brother" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="brotherCount">How many brothers? <span class="required">*</span></label>
+                      <input type="number" id="brotherCount" name="brotherCount" min="1" max="10" step="1" value="1" data-person-count="brother" />
+                    </div>
+                    <div class="family-list" id="brotherList"></div>
+                  </div>
+                </div>
+                <div class="family-person" data-family-person="grandmother" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="grandmotherCount">How many grandmothers? <span class="required">*</span></label>
+                      <input type="number" id="grandmotherCount" name="grandmotherCount" min="1" max="10" step="1" value="1" data-person-count="grandmother" />
+                    </div>
+                    <div class="family-list" id="grandmotherList"></div>
+                  </div>
+                </div>
+                <div class="family-person" data-family-person="grandfather" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="grandfatherCount">How many grandfathers? <span class="required">*</span></label>
+                      <input type="number" id="grandfatherCount" name="grandfatherCount" min="1" max="10" step="1" value="1" data-person-count="grandfather" />
+                    </div>
+                    <div class="family-list" id="grandfatherList"></div>
+                  </div>
+                </div>
+                <div class="family-person" data-family-person="cousin" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="cousinCount">How many cousins? <span class="required">*</span></label>
+                      <input type="number" id="cousinCount" name="cousinCount" min="1" max="10" step="1" value="1" data-person-count="cousin" />
+                    </div>
+                    <div class="family-list" id="cousinList"></div>
+                  </div>
+                </div>
+                <div class="family-person" data-family-person="auntUncle" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="auntUncleCount">How many aunts/uncles? <span class="required">*</span></label>
+                      <input type="number" id="auntUncleCount" name="auntUncleCount" min="1" max="10" step="1" value="1" data-person-count="auntUncle" />
+                    </div>
+                    <div class="family-list" id="auntUncleList"></div>
+                  </div>
+                </div>
+                <div class="family-person" data-family-person="friend" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="friendCount">How many friends? <span class="required">*</span></label>
+                      <input type="number" id="friendCount" name="friendCount" min="1" max="10" step="1" value="1" data-person-count="friend" />
+                    </div>
+                    <div class="family-list" id="friendList"></div>
+                  </div>
+                </div>
+                <div class="family-person" data-family-person="other" hidden>
+                  <div class="family-row">
+                    <div class="family-field">
+                      <label for="otherCount">How many others? <span class="required">*</span></label>
+                      <input type="number" id="otherCount" name="otherCount" min="1" max="10" step="1" value="1" data-person-count="other" />
+                    </div>
+                    <div class="family-list" id="otherList"></div>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
             <div class="field">
               <label for="languagesHome">Languages at home <span class="required">*</span></label>
               <input type="text" id="languagesHome" name="languagesHome" required data-required="true" />
@@ -163,7 +305,7 @@
           </div>
         </section>
 
-        <section class="panel accent-plum" data-step="2" aria-labelledby="section-hobbies">
+        <section class="panel accent-mint" data-step="2" aria-labelledby="section-hobbies">
           <div class="panel-header">
             <h2 id="section-hobbies">My Hobbies &amp; Strengths</h2>
             <p>Share what you enjoy and what you’re great at.</p>
@@ -404,7 +546,7 @@
           </div>
         </section>
 
-        <section class="panel accent-mint" data-step="4" aria-labelledby="section-english">
+        <section class="panel accent-flame" data-step="4" aria-labelledby="section-english">
           <div class="panel-header">
             <h2 id="section-english">English Language</h2>
             <p>Tell us about your English journey.</p>
@@ -443,7 +585,7 @@
           </div>
         </section>
 
-        <section class="panel accent-flame" data-step="5" aria-labelledby="section-lessons">
+        <section class="panel accent-plum" data-step="5" aria-labelledby="section-lessons">
           <div class="panel-header">
             <h2 id="section-lessons">English Lessons</h2>
             <p>Rate how much you enjoy different lesson styles.</p>
@@ -548,7 +690,7 @@
           </div>
         </section>
 
-        <section class="panel accent-plum" data-step="6" aria-labelledby="section-best">
+        <section class="panel accent-gold" data-step="6" aria-labelledby="section-best">
           <div class="panel-header">
             <h2 id="section-best">Best Lessons Ever</h2>
             <p>Describe your favorite lesson experiences.</p>

@@ -39,25 +39,25 @@
 
 .rating input[type="radio"].is-filled:nth-child(1),
 .rating input[type="radio"]:nth-child(1):checked {
-  background: var(--tiger-flame);
+  background:var(--linen);
 }
 
 .rating input[type="radio"].is-filled:nth-child(2),
 .rating input[type="radio"]:nth-child(2):checked {
-  background: var(--plum);
+  background: #FAB4E5ff;
 }
 
 .rating input[type="radio"].is-filled:nth-child(3),
 .rating input[type="radio"]:nth-child(3):checked {
-  background: var(--bright-gold);
+  background: var(--plum);
 }
 
 .rating input[type="radio"].is-filled:nth-child(4),
 .rating input[type="radio"]:nth-child(4):checked {
-  background: var(--mint-leaf);
+  background:#F6B77Dff ;
 }
 
 .rating input[type="radio"].is-filled:nth-child(5),
 .rating input[type="radio"]:nth-child(5):checked {
-  background: var(--space-indigo);
+  background: var(--tiger-flame);
 }
