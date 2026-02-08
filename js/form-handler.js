@@ -15,7 +15,7 @@
     const result = window.Validation.validateForm(form);
     if (!result.valid) {
       result.firstInvalid?.scrollIntoView({ behavior: "smooth", block: "center" });
-      return { ok: false, message: "Please complete all required fields." };
+      return { ok: false, message: "Please complete the required fields before submitting.", firstInvalid: result.firstInvalid };
     }
 
     const data = window.StorageManager.serializeForm(form);

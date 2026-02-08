@@ -21,6 +21,8 @@
   const englishGoal = document.getElementById("englishGoal");
   const englishFocus = document.getElementById("englishFocus");
   const englishFocusGroup = document.getElementById("englishFocusGroup");
+  const classGroup = document.getElementById("classGroup");
+  const classNameInput = document.getElementById("className");
   const livesWithHidden = document.getElementById("livesWith");
   const livesWithCheckboxes = Array.from(document.querySelectorAll("[data-lives-with]"));
   const familyDetails = document.getElementById("familyDetails");
@@ -380,6 +382,19 @@
     updateEnglishGoalPlaceholder(skill);
   }
 
+  function setClassSelection(value) {
+    if (!classGroup || !classNameInput) {
+      return;
+    }
+    const buttons = Array.from(classGroup.querySelectorAll("[data-class]"));
+    buttons.forEach((button) => {
+      const isSelected = button.dataset.class === value;
+      button.classList.toggle("is-selected", isSelected);
+      button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    });
+    classNameInput.value = value || "";
+  }
+
   function createHobbyRow(label, index = null, ratingValue = "") {
     if (!hobbyList) {
       return;
@@ -421,6 +436,12 @@
 
     row.appendChild(labelSpan);
     row.appendChild(rating);
+    const removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.className = "hobby-remove";
+    removeButton.setAttribute("aria-label", `Remove ${trimmedLabel}`);
+    removeButton.textContent = "×";
+    row.appendChild(removeButton);
     row.appendChild(hiddenInput);
     hobbyList.appendChild(row);
 
@@ -552,6 +573,15 @@
     updateProgress();
   });
 
+  classGroup?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-class]");
+    if (!button) {
+      return;
+    }
+    setClassSelection(button.dataset.class);
+    updateProgress();
+  });
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const result = await window.FormHandler.handleSubmit(form);
@@ -559,6 +589,16 @@
       saveIndicator.textContent = "Submitted! Your answers are saved.";
     } else if (result.message) {
       saveIndicator.textContent = result.message;
+      if (result.firstInvalid) {
+        const panel = result.firstInvalid.closest(".panel");
+        if (panel) {
+          const index = panels.indexOf(panel);
+          if (index >= 0) {
+            showStep(index);
+          }
+        }
+        result.firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
     }
   });
 
@@ -594,6 +634,19 @@
     }
   });
 
+  hobbyList?.addEventListener("click", (event) => {
+    const button = event.target.closest(".hobby-remove");
+    if (!button) {
+      return;
+    }
+    const row = button.closest(".hobby-rating-row");
+    if (row) {
+      row.remove();
+      updateHobbySummary();
+      updateProgress();
+    }
+  });
+
   const savedData = window.StorageManager.loadFormData(form);
   if (savedData) {
     updateSaveIndicator("just now");
@@ -610,6 +663,7 @@
   hydrateHobbyRatings(savedData || {});
   updateFavoriteSubjectPlaceholder();
   setEnglishFocus(savedData?.englishFocus || "");
+  setClassSelection(savedData?.className || "");
   updateEnglishGoalPlaceholder(savedData?.englishFocus || "Speaking");
   updateProgress();
   showStep(0);
