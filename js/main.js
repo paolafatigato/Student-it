@@ -16,12 +16,16 @@
   const hobbyInput = document.getElementById("hobbyInput");
   const hobbyList = document.getElementById("hobbyList");
   const hobbySummary = document.getElementById("hobbySummary");
+  const favoriteSubject = document.getElementById("favoriteSubject");
+  const favoriteSubjectReason = document.getElementById("favoriteSubjectReason");
+  const englishGoal = document.getElementById("englishGoal");
+  const englishFocus = document.getElementById("englishFocus");
+  const englishFocusGroup = document.getElementById("englishFocusGroup");
   const livesWithHidden = document.getElementById("livesWith");
   const livesWithCheckboxes = Array.from(document.querySelectorAll("[data-lives-with]"));
   const familyDetails = document.getElementById("familyDetails");
   const familyPersonSections = Array.from(document.querySelectorAll("[data-family-person]"));
   const familyCountInputs = Array.from(document.querySelectorAll("[data-person-count]"));
-  const downloadJson = document.getElementById("downloadJson");
   const printPdf = document.getElementById("printPdf");
   const app = document.querySelector(".app");
   const accentClasses = ["accent-mint", "accent-flame", "accent-plum", "accent-gold"];
@@ -33,6 +37,23 @@
     "cooking, biking...",
     "coding, photography..."
   ];
+  const favoriteSubjectPlaceholders = {
+    English: "I like traveling and ...",
+    Crafts: "I always make bracelets and...",
+    Math: "I like numbers and...",
+    Science: "I like experiments and...",
+    Italian: "I enjoy stories and...",
+    Literature: "I love reading and...",
+    Art: "I like drawing and...",
+    Music: "I like singing and...",
+    Theater: "I like acting and...",
+    "P.E.": "I like sports and...",
+    Technology: "I like building things and...",
+    Geography: "I like maps and...",
+    History: "I like old stories and...",
+    Informatics: "I like coding and...",
+    Dance: "I like moving and..."
+  };
 
   let currentStep = 0;
   let hobbyCount = 0;
@@ -324,6 +345,41 @@
     hobbySummary.value = labels.join(", ");
   }
 
+  function updateFavoriteSubjectPlaceholder() {
+    if (!favoriteSubject || !favoriteSubjectReason) {
+      return;
+    }
+    const selected = favoriteSubject.value;
+    favoriteSubjectReason.placeholder = favoriteSubjectPlaceholders[selected]
+      || "Because...";
+  }
+
+  function updateEnglishGoalPlaceholder(skill) {
+    if (!englishGoal) {
+      return;
+    }
+    const label = skill || "Speaking";
+    englishGoal.placeholder = `${label} because I want to ...`;
+  }
+
+  function setEnglishFocus(skill) {
+    if (!englishFocusGroup || !englishFocus) {
+      return;
+    }
+    const buttons = Array.from(englishFocusGroup.querySelectorAll("[data-english-skill]"));
+    buttons.forEach((button) => {
+      const isSelected = button.dataset.englishSkill === skill;
+      button.classList.toggle("is-selected", isSelected);
+      if (isSelected) {
+        button.setAttribute("aria-pressed", "true");
+      } else {
+        button.setAttribute("aria-pressed", "false");
+      }
+    });
+    englishFocus.value = skill || "";
+    updateEnglishGoalPlaceholder(skill);
+  }
+
   function createHobbyRow(label, index = null, ratingValue = "") {
     if (!hobbyList) {
       return;
@@ -470,6 +526,9 @@
     if (event.target.matches(".rating input[type='radio']")) {
       updateRatingGroup(event.target.closest(".rating"));
     }
+    if (event.target === favoriteSubject) {
+      updateFavoriteSubjectPlaceholder();
+    }
     if (event.target.matches("[data-lives-with]")) {
       syncFamilySection();
     }
@@ -482,6 +541,15 @@
     updateProgress();
     toggleStudyOther();
     calculateSleepHours();
+  });
+
+  englishFocusGroup?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-english-skill]");
+    if (!button) {
+      return;
+    }
+    setEnglishFocus(button.dataset.englishSkill);
+    updateProgress();
   });
 
   form.addEventListener("submit", async (event) => {
@@ -507,14 +575,9 @@
     updateProgress();
     updateCounters();
     updateSaveIndicator();
+    updateFavoriteSubjectPlaceholder();
+    setEnglishFocus("");
   });
-
-  if (downloadJson) {
-    downloadJson.addEventListener("click", () => {
-      const data = window.StorageManager.serializeForm(form);
-      window.FormHandler.downloadJson(data);
-    });
-  }
 
   if (printPdf) {
     printPdf.addEventListener("click", () => window.print());
@@ -545,6 +608,9 @@
   updateAllRatings();
   syncFamilySection(savedData || {});
   hydrateHobbyRatings(savedData || {});
+  updateFavoriteSubjectPlaceholder();
+  setEnglishFocus(savedData?.englishFocus || "");
+  updateEnglishGoalPlaceholder(savedData?.englishFocus || "Speaking");
   updateProgress();
   showStep(0);
 })();

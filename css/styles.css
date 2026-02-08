@@ -388,6 +388,13 @@ input[readonly] {
   transform: translateY(-1px);
 }
 
+.skill-chip.is-selected {
+  background: var(--tiger-flame);
+  color: var(--white);
+  border-color: var(--tiger-flame);
+  box-shadow: 0 8px 16px rgba(240, 107, 51, 0.25);
+}
+
 .family-details {
   display: grid;
   gap: 14px;
@@ -518,6 +525,14 @@ input[readonly] {
   gap: 12px;
   justify-content: center;
   margin-top: 18px;
+}
+
+.footer-credit {
+  flex-basis: 100%;
+  text-align: center;
+  font-size: 0.7rem;
+  color: rgba(35, 40, 59, 0.6);
+  letter-spacing: 0.4px;
 }
 
 .accent-mint {

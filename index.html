@@ -270,7 +270,7 @@
             </fieldset>
 
             <div class="field">
-              <label for="screenTime">Hours of screen time per day: <span id="screenValue">2</span></label>
+              <label for="screenTime">📱Hours of screen time per day: <span id="screenValue">2</span></label>
               <input type="range" id="screenTime" name="screenTime" min="0" max="10" step="1" value="2" data-required="true" />
             </div>
 
@@ -573,6 +573,18 @@
               <label for="englishYears">How long have I studied English? <span class="required">*</span></label>
               <input type="text" id="englishYears" name="englishYears" required data-required="true" placeholder="Example: 3 years" />
             </div>
+            <fieldset class="field">
+              <legend>Choose a focus <span class="required">*</span></legend>
+              <input type="hidden" id="englishFocus" name="englishFocus" required data-required="true" />
+              <div class="choice-grid" id="englishFocusGroup">
+                <button type="button" class="choice-chip skill-chip" data-english-skill="Speaking">Speaking</button>
+                <button type="button" class="choice-chip skill-chip" data-english-skill="Listening">Listening</button>
+                <button type="button" class="choice-chip skill-chip" data-english-skill="Writing">Writing</button>
+                <button type="button" class="choice-chip skill-chip" data-english-skill="Reading">Reading</button>
+                <button type="button" class="choice-chip skill-chip" data-english-skill="Pronunciation">Pronunciation</button>
+                <button type="button" class="choice-chip skill-chip" data-english-skill="Vocabulary">Vocabulary</button>
+              </div>
+            </fieldset>
             <div class="field">
               <label for="englishGoal">One thing I want to learn in English <span class="required">*</span></label>
               <textarea id="englishGoal" name="englishGoal" rows="4" required data-required="true" data-maxlen="240"></textarea>
@@ -717,9 +729,9 @@
         </section>
 
         <footer class="app-footer">
-          <button type="button" class="btn btn-outline" id="downloadJson">Download JSON</button>
           <button type="button" class="btn btn-outline" id="printPdf">Print / Save as PDF</button>
           <button type="reset" class="btn btn-ghost">Reset</button>
+          <span class="footer-credit">Ms Fatigato</span>
         </footer>
       </form>
     </main>
