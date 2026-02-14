@@ -28,7 +28,8 @@
   const familyDetails = document.getElementById("familyDetails");
   const familyPersonSections = Array.from(document.querySelectorAll("[data-family-person]"));
   const familyCountInputs = Array.from(document.querySelectorAll("[data-person-count]"));
-  const printPdf = document.getElementById("printPdf");
+  const printPdfContainer = document.getElementById("printPdfContainer");
+  let printPdf = null;
   const app = document.querySelector(".app");
   const accentClasses = ["accent-mint", "accent-flame", "accent-plum", "accent-gold"];
   const hobbyPlaceholderSets = [
@@ -587,6 +588,14 @@
     const result = await window.FormHandler.handleSubmit(form);
     if (result.ok) {
       saveIndicator.textContent = "Submitted! Your answers are saved.";
+      // Mostra il pulsante Print/Save as PDF
+      if (printPdfContainer) {
+        printPdfContainer.style.display = "block";
+        printPdf = document.getElementById("printPdf");
+        if (printPdf) {
+          printPdf.onclick = () => window.print();
+        }
+      }
     } else if (result.message) {
       saveIndicator.textContent = result.message;
       if (result.firstInvalid) {
@@ -619,9 +628,7 @@
     setEnglishFocus("");
   });
 
-  if (printPdf) {
-    printPdf.addEventListener("click", () => window.print());
-  }
+  // Il pulsante Print/Save as PDF viene gestito dopo il submit
 
   screenTime?.addEventListener("input", updateScreenTime);
   bedTime?.addEventListener("change", calculateSleepHours);
