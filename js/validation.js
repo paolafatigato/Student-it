@@ -33,10 +33,18 @@
       showError(target, message);
     }
 
+
     // Richiedi solo il nome
     const firstName = form.querySelector("#firstName");
     if (!firstName || !firstName.value.trim()) {
       addError(firstName, "Il nome è obbligatorio.");
+    }
+
+    // Richiedi almeno una lingua a casa
+    const languagesHome = form.querySelector("#languagesHome");
+    if (!languagesHome || !languagesHome.value.trim()) {
+      const group = form.querySelector("#languagesHomeGroup");
+      addError(group || languagesHome, "Seleziona almeno una lingua parlata a casa.");
     }
 
     return { valid: !firstInvalid, firstInvalid };

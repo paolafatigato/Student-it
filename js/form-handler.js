@@ -26,6 +26,12 @@
       return { ok: false, message: "Please complete the required fields before submitting.", firstInvalid: result.firstInvalid };
     }
 
+
+    // Assicura che il campo languagesHome sia aggiornato
+    const languagesHome = form.querySelector('#languagesHome');
+    if (languagesHome) {
+      languagesHome.value = languagesHome.value.trim();
+    }
     const data = window.StorageManager.serializeForm(form);
     console.log("Form submission", data);
 

@@ -1,3 +1,91 @@
+  // --- Languages at home logic ---
+  // --- Languages at home logic (chip style) ---
+  const italianBtn = document.getElementById('italianBtn');
+  const otherLanguages = document.getElementById('otherLanguages');
+  const otherLanguageInput = document.getElementById('otherLanguageInput');
+  const languagesHomeHidden = document.getElementById('languagesHome');
+  const selectedLanguagesDiv = document.getElementById('selectedLanguages');
+
+  let selectedLangs = [];
+
+  function updateLanguagesHomeField() {
+    const selected = [...selectedLangs];
+    if (italianBtn && italianBtn.getAttribute('aria-pressed') === 'true') {
+      if (!selected.includes('Italian')) selected.unshift('Italian');
+    } else {
+      const idx = selected.indexOf('Italian');
+      if (idx !== -1) selected.splice(idx, 1);
+    }
+    if (languagesHomeHidden) {
+      languagesHomeHidden.value = selected.join(', ');
+    }
+    renderSelectedLanguages(selected);
+  }
+
+  function renderSelectedLanguages(selected) {
+    if (!selectedLanguagesDiv) return;
+    selectedLanguagesDiv.innerHTML = '';
+    selected.filter(l => l !== 'Italian').forEach(lang => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'choice-chip lang-chip is-selected';
+      btn.textContent = lang;
+      btn.onclick = () => {
+        // Remove from selectedLangs
+        selectedLangs = selectedLangs.filter(l => l !== lang);
+        updateLanguagesHomeField();
+      };
+      selectedLanguagesDiv.appendChild(btn);
+    });
+  }
+
+  if (italianBtn) {
+    italianBtn.addEventListener('click', () => {
+      const pressed = italianBtn.getAttribute('aria-pressed') === 'true';
+      italianBtn.setAttribute('aria-pressed', pressed ? 'false' : 'true');
+      italianBtn.classList.toggle('is-selected', !pressed);
+      updateLanguagesHomeField();
+    });
+  }
+
+  if (otherLanguages) {
+    otherLanguages.addEventListener('change', () => {
+      const val = otherLanguages.value;
+      if (val === 'other') {
+        otherLanguageInput.style.display = 'block';
+        otherLanguageInput.focus();
+      } else {
+        otherLanguageInput.style.display = 'none';
+        otherLanguageInput.value = '';
+        if (val) {
+          const langName = val.charAt(0).toUpperCase() + val.slice(1);
+          if (!selectedLangs.includes(langName)) {
+            selectedLangs.push(langName);
+          }
+        }
+      }
+      updateLanguagesHomeField();
+    });
+  }
+
+  if (otherLanguageInput) {
+    otherLanguageInput.addEventListener('input', () => {
+      // Aggiorna o aggiungi la lingua custom
+      selectedLangs = selectedLangs.filter(l => l !== 'Other' && l !== otherLanguageInput.dataset.lastValue);
+      if (otherLanguageInput.value.trim()) {
+        selectedLangs.push(otherLanguageInput.value.trim());
+        otherLanguageInput.dataset.lastValue = otherLanguageInput.value.trim();
+      } else {
+        delete otherLanguageInput.dataset.lastValue;
+      }
+      updateLanguagesHomeField();
+    });
+  }
+
+  // Inizializza Italian come non selezionato
+  italianBtn?.setAttribute('aria-pressed', 'false');
+  italianBtn?.classList.remove('is-selected');
+  updateLanguagesHomeField();
 (function () {
   const form = document.getElementById("studentForm");
   const panels = Array.from(document.querySelectorAll(".panel"));
@@ -542,6 +630,7 @@
   form.addEventListener("input", () => {
     updateProgress();
     updateCounters();
+    updateLanguagesHomeField();
   });
 
   form.addEventListener("change", (event) => {
