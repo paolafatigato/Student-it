@@ -614,6 +614,13 @@
   form.addEventListener("reset", () => {
     window.FormHandler.handleReset(form);
     syncFamilySection();
+    // Deseleziona tutti i radio button nelle classi .rating
+    const ratings = Array.from(form.querySelectorAll(".rating input[type='radio']"));
+    ratings.forEach(radio => {
+      radio.checked = false;
+      radio.classList.remove("is-filled");
+    });
+    updateAllRatings();
     if (hobbyList) {
       hobbyList.innerHTML = "";
     }
