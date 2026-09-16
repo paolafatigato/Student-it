@@ -460,9 +460,7 @@
 
   function updateFilteredStats() {
     const availableClasses = getAvailableClasses(responses);
-    if (!selectedClasses.size && availableClasses.length) {
-      selectedClasses = new Set(availableClasses);
-    }
+    // Always show all classes as selectable, but don't auto-select if none
     renderClassFilters(availableClasses);
     const filtered = applyClassFilter(responses);
     renderStats(filtered);
@@ -502,15 +500,28 @@
     if (!data.length) {
       return;
     }
-    const columns = buildColumns(data);
+    // Custom columns: class, firstName, lastName, bestLessons (4th, wider), rest
+    let columns = buildColumns(data);
+    // Ensure 'class' and 'bestLessons' are present and ordered
+    const classCol = columns.find(c => /class(Name)?|classe|classroom|classRoom/i.test(c));
+    const bestLessonCol = columns.find(c => /bestLessons?/i.test(c));
+    columns = columns.filter(c => c !== classCol && c !== bestLessonCol);
+    // Compose: class, firstName, lastName, bestLesson, ...rest
+    const ordered = [classCol, "firstName", "lastName", bestLessonCol].filter(Boolean);
+    const rest = columns.filter(c => !ordered.includes(c));
+    const finalCols = [...ordered, ...rest];
+
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    columns.forEach((col) => {
+    finalCols.forEach((col, idx) => {
       const th = document.createElement("th");
       th.textContent = col;
       th.style.textAlign = "left";
       th.style.padding = "8px";
       th.style.borderBottom = "1px solid #ddd";
+      if (col === bestLessonCol && idx === 3) {
+        th.style.width = "620px";
+      }
       headerRow.appendChild(th);
     });
     const actionHeader = document.createElement("th");
@@ -525,16 +536,22 @@
     const tbody = document.createElement("tbody");
     data.slice(0, 10).forEach((row) => {
       const tr = document.createElement("tr");
-      columns.forEach((col) => {
+      tr.style.height = "48px";
+      finalCols.forEach((col, idx) => {
         const td = document.createElement("td");
         td.textContent = String(flattenValue(row[col]));
         td.style.padding = "8px";
         td.style.borderBottom = "1px solid #f0f0f0";
+        td.style.verticalAlign = "middle";
+        if (col === bestLessonCol && idx === 3) {
+          td.style.width = "520px";
+        }
         tr.appendChild(td);
       });
       const actionCell = document.createElement("td");
       actionCell.style.padding = "8px";
       actionCell.style.borderBottom = "1px solid #f0f0f0";
+      actionCell.style.verticalAlign = "middle";
       const deleteButton = document.createElement("button");
       deleteButton.type = "button";
       deleteButton.className = "btn btn-outline btn-danger";

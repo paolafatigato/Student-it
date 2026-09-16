@@ -1,13 +1,14 @@
 .rating {
   display: inline-flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: clamp(4px, 2vw, 8px);
   align-items: center;
 }
 
 .rating input[type="radio"] {
   appearance: none;
-  width: 54px;
-  height: 54px;
+  width: clamp(32px, 9vw, 54px);
+  height: clamp(32px, 9vw, 54px);
   border-radius: 50%;
   border: none;
   cursor: pointer;

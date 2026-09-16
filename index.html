@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#58BC98" />
   <title>Student Information Questionnaire</title>
+  <link rel="icon" type="image/png" href="../logo.png" />
+  <link rel="apple-touch-icon" href="../logo.png" />
+  <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/rating-component.css" />
 </head>
@@ -11,10 +15,13 @@
   <div class="app">
     <header class="app-header" role="banner">
       <div class="header-content">
-        <div>
-          <p class="eyebrow">Welcome!</p>
-          <h1>Student Information Questionnaire</h1>
-          <p class="subtitle">Let me know about you. Your answers help me make lessons awesome.</p>
+        <div class="brand-block">
+          <!--<img class="brand-logo" src="../logo.png" alt="Student questionnaire logo" />-->
+          <div class="brand-copy">
+            <p class="eyebrow">Welcome!</p>
+            <h1>Student Information Questionnaire</h1>
+            <p class="subtitle">Let me know about you. Your answers help me make lessons awesome.</p>
+          </div>
         </div>
         <div class="progress-wrapper" aria-live="polite">
           <div class="progress-label">Progress: <span id="progressPercent">0%</span></div>
